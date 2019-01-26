@@ -1,0 +1,59 @@
+{% extends "../includes/layout.twig" %}
+
+{% block title %}Webpack 4 template{% endblock %} 
+{% block meta_description %}Quick start template using webpack 4{% endblock %} 
+{% block meta_keywords %}webpack, frontend{% endblock %} 
+
+{% block body_class %}jelly{% endblock %} 
+
+{% block main %}
+<main>
+   <div id="container"></div>
+
+    <script id="vertShader" type="shader">
+        varying vec2 vUv;
+        varying vec3 vecPos;
+        varying vec3 v_position;
+        uniform float time;
+
+        void main() {
+            vUv = uv;
+            v_position = position.xyz;
+            vecPos = (modelViewMatrix * vec4(v_position, 1.0)).xyz;
+            
+            gl_Position = projectionMatrix * vec4(vecPos, 1.0);
+        }
+    </script>
+    <script id="fragShader" type="shader">
+        varying vec3 v_position;
+        varying vec2 vUv;
+
+        void main(void) {
+            vec2 st = v_position.xy;
+            vec2 grid = abs(fract(st/4. - 0.5) - 0.5) / fwidth(st/4.);
+            float colorOpacity = min(grid.x, grid.y);
+            vec3 color1 = vec3(v_position.z/100. + 0.1,v_position.z/100. + 0.1,v_position.z/100. + 0.1);
+
+            float g = 0.0;
+            if( 0. < v_position.z && v_position.z < 40.) { 
+                g =  1. - ((v_position.z - 20.)/-20.); 
+            } 
+            if( v_position.z >= 40.) { 
+                g =  1. - ((v_position.z - 50.)/50.); 
+            } 
+
+            float r = 0.0;
+            if( 20. < v_position.z && v_position.z < 40.) { 
+                r =  1. - ((v_position.z - 40.)/-40.); 
+            } 
+            if( v_position.z >= 40.) { 
+                r =  1. + ((v_position.z - 30.)/30.); 
+            } 
+
+            gl_FragColor = vec4(r, g ,0.0,1. - colorOpacity);
+            
+        }
+    </script>
+
+</main>
+{% endblock %}

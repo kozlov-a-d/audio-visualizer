@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+
+    <title>Webpack 4 template</title>
+
+    <!-- Meta Tags -->
+    <meta name="description" content="Quick start template using webpack 4">
+    <meta name="keywords" content="webpack, frontend">
+
+    <!-- <link rel="shortcut icon" href="dist/assets/favicon/favicon.ico"> -->
+    <link rel="stylesheet" href="dist/assets/build/app.css">
+
+    <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Organization",
+      "name" : "OrganizationName",
+      "url" : "http://domain.ru",
+      "sameAs" : [
+        "http://vk.com/id",
+        "https://www.facebook.com/id",
+        "https://twitter.com/id",
+        "https://plus.google.com/+id"
+      ]
+    }
+    </script>
+
+</head>
+
+<body class="jelly">
+    
+
+
+    
+            
+<main>
+   <div id="container"></div>
+
+    <script id="vertShader" type="shader">
+        varying vec2 vUv;
+        varying vec3 vecPos;
+        varying vec3 v_position;
+        uniform float time;
+
+        void main() {
+            vUv = uv;
+            v_position = position.xyz;
+            vecPos = (modelViewMatrix * vec4(v_position, 1.0)).xyz;
+            
+            gl_Position = projectionMatrix * vec4(vecPos, 1.0);
+        }
+    </script>
+    <script id="fragShader" type="shader">
+        varying vec3 v_position;
+        varying vec2 vUv;
+
+        void main(void) {
+            vec2 st = v_position.xy;
+            vec2 grid = abs(fract(st/4. - 0.5) - 0.5) / fwidth(st/4.);
+            float colorOpacity = min(grid.x, grid.y);
+            vec3 color1 = vec3(v_position.z/100. + 0.1,v_position.z/100. + 0.1,v_position.z/100. + 0.1);
+
+            float g = 0.0;
+            if( 0. < v_position.z && v_position.z < 40.) { 
+                g =  1. - ((v_position.z - 20.)/-20.); 
+            } 
+            if( v_position.z >= 40.) { 
+                g =  1. - ((v_position.z - 50.)/50.); 
+            } 
+
+            float r = 0.0;
+            if( 20. < v_position.z && v_position.z < 40.) { 
+                r =  1. - ((v_position.z - 40.)/-40.); 
+            } 
+            if( v_position.z >= 40.) { 
+                r =  1. + ((v_position.z - 30.)/30.); 
+            } 
+
+            gl_FragColor = vec4(r, g ,0.0,1. - colorOpacity);
+            
+        }
+    </script>
+
+</main>
+
+        </div>
+    
+    <script src="dist/assets/build/app.js"></script>
+</body>
+</html>
