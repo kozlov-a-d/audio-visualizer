@@ -8,8 +8,14 @@ export default class AudioAnalyzer{
 
         // Создание источника
         this.audio = new Audio();
-        this.audio.src = "assets/audio/sod-lonely-day.mp3"; 
-        // this.audio.src = "assets/audio/song.mp3";
+        // костыль для гитхаба
+        if(window.location.host === 'kozlov-a-d.github.io'){
+            this.audio.src = "dist/assets/audio/sod-lonely-day.mp3"; 
+        } else {
+            this.audio.src = "assets/audio/sod-lonely-day.mp3"; 
+        }
+        
+        // this.audio.src = "assets/audio/song.mp3";   
         this.controls = true;
 
         this.createAudioContext();
